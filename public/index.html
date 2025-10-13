@@ -1,0 +1,29 @@
+<!-- file: public/index.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trình sửa câu tiếng Hàn</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Overlay -->
+    <div id="login-overlay">
+        <input type="password" id="accessKeyInput" placeholder="🔑" autofocus>
+    </div>
+
+    <!-- Main App Container (hidden by default) -->
+    <div class="container" style="display: none;">
+        <div class="upload-area" id="uploadArea">
+            <label id="uploadLabel">Dán hình ảnh vào đây (Ctrl+V)</label>
+            <img id="imagePreview" src="" alt="Xem trước hình ảnh" class="hidden">
+        </div>
+        <div class="result-area">
+            <div id="loader" class="loader hidden"></div>
+            <p id="resultText"></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

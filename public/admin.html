@@ -1,0 +1,120 @@
+<!-- file: public/admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <dialog id="loginDialog">
+        <form id="loginForm">
+            <h2>Admin Access</h2>
+            <p>Enter your administrator key to continue.</p>
+            <input type="password" id="adminKeyInput" placeholder="••••••••••••••••" required>
+            <button type="submit">Login</button>
+            <p id="loginError" class="error-message"></p>
+        </form>
+    </dialog>
+
+    <div id="adminPanel">
+        <header>
+            <h1>API Key Management</h1>
+            <button id="refreshBtn" class="refresh-btn" title="Refresh list and clear server cache">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                <span>Refresh & Flush Cache</span>
+            </button>
+        </header>
+
+        <main>
+            <section class="create-key-section">
+                <h2>Create New Key</h2>
+                <form id="createKeyForm" class="create-key-form">
+                    <div class="form-row">
+                        <input type="text" id="keyNameInput" placeholder="Key Holder's Name" required>
+                        <input type="number" id="validityDaysInput" value="30" min="1" max="365" title="Validity in days">
+                    </div>
+                    <button type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span>Create Key</span>
+                    </button>
+                </form>
+            </section>
+
+            <div id="newKeyContainer" class="new-key-container hidden">
+                <strong>New Key Generated:</strong>
+                <p>Copy this key now. You will not be able to see it again.</p>
+                <div class="key-display">
+                    <code id="newKeyDisplay"></code>
+                    <button id="copyKeyBtn" title="Copy to clipboard">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div id="loader" class="loader"></div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Name</th>
+                            <th>Creation Date</th>
+                            <th>Expiration Date</th>
+                            <th>Requests</th>
+                            <th>Last IP</th>
+                            <th>Last Device</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="keysTableBody"></tbody>
+                </table>
+                <p id="noKeysMessage" class="hidden">No API keys found. Create one to get started.</p>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <template id="keyRowTemplate">
+        <tr data-creation-date="">
+            <td><span class="status"></span></td>
+            <td data-label="Name" class="editable-cell">
+                <span class="name-text"></span>
+                <button class="edit-name-btn" title="Edit Name">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                <div class="edit-controls hidden">
+                    <input type="text" class="name-input">
+                    <button class="save-btn">✔️</button>
+                    <button class="cancel-btn">✖️</button>
+                </div>
+            </td>
+            <td data-label="Created"></td>
+            <td data-label="Expires" class="editable-cell">
+                <span class="date-text"></span>
+                <button class="edit-date-btn" title="Edit Expiration Date">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                <div class="edit-controls hidden">
+                    <input type="date" class="date-input">
+                    <button class="save-btn">✔️</button>
+                    <button class="cancel-btn">✖️</button>
+                </div>
+            </td>
+            <td data-label="Requests"></td>
+            <td data-label="Last IP"></td>
+            <td data-label="Last Device"></td>
+            <td data-label="Actions">
+                <button class="delete-btn" title="Delete Key">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
+            </td>
+        </tr>
+    </template>
+
+    <script src="admin.js"></script>
+</body>
+</html>
