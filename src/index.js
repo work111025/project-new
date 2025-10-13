@@ -110,7 +110,7 @@ app.post('/api/process-image', apiRateLimiter, userAuthMiddleware, async (req, r
         }
 
         const genAI = new GoogleGenerativeAI(apiKey);
-        // Use a modern, fast, multimodal model. Gemini 1.5 Flash is ideal for this.
+        // Use a modern, fast, multimodal model. Gemini-2.5-flash-lite is ideal for this.
         const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
 
         const imagePart = {
@@ -260,5 +260,6 @@ async function startServer() {
 if (require.main === module) {
   startServer();
 }
+
 
 module.exports = app;
