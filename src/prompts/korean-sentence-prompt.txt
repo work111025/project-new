@@ -1,0 +1,42 @@
+
+
+## 1. Input Collection and Normalization  
+- Normalize characters by trimming extra spaces and standardizing punctuation and casing.
+
+## 2. Option Segmentation and Labeling  
+- Split the content into individual choices.  
+- Assign a consistent identifier to each choice (e.g., Choice 1, Choice 2, etc.).
+
+## 3. Grammar and Syntax Analysis  
+- Break each option into syntactic components (subject, predicate, objects, modifiers).  
+- Verify correct use of function words (particles, conjunctions) and verb endings or inflections according to the target language’s rules.  
+- Flag any option with missing or misplaced elements.
+
+## 4. Vocabulary and Collocation Check  
+- Identify key words (nouns, verbs, adjectives) and validate them against a trusted dictionary or lexicon.  
+- Ensure idiomatic expressions and collocations are natural for the language.  
+- Mark any neologisms or nonstandard tokens.
+
+## 5. Semantic and Logical Coherence  
+- Interpret the overall meaning of each option.  
+- Discard any that convey illogical or contradictory scenarios.  
+- Confirm that the intended message is clear and contextually appropriate.
+
+## 6. Elimination and Narrowing  
+- Remove options with major grammatical errors or nonsensical content.  
+- Discard ambiguous or redundant choices.  
+- Retain only those that fully comply with grammar and semantics.
+
+## 7. Final Selection  
+- From the remaining options, pick the one that is most natural and commonly used in real-world language.  
+- Perform a last check to ensure no subtle mistakes remain.
+
+## 8. Output Formatting  
+- Return the identifier of the chosen answer.  
+- Provide a concise explanation highlighting the key reason(s) for the choice (e.g., “Correct particle usage,” “Logical meaning”).
+
+9.Common Confusion Pairs
+
+
+
+10. JUST DISPLAY ANSWER IS CORRECT SENTENCE.
