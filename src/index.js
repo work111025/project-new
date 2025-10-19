@@ -8,28 +8,6 @@ const db = require('./db');
 const keyPool = require('./key-pool');
 const path = require('path');
 const fs = require('fs');
-const multer = require('multer');
-
-const storage = multer.memoryStorage();
-
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === 'image/jpeg' ||
-    file.mimetype === 'image/png' ||
-    file.mimetype === 'image/webp' ||
-    file.mimetype === 'image/gif'
-  ) {
-    cb(null, true);
-  } else {
-    cb(new Error('Định dạng tệp không hợp lệ! Chỉ chấp nhận PNG, JPG, WEBP, GIF.'), false);
-  }
-};
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-  fileFilter: fileFilter,
-});
 
 require('dotenv').config();
 
@@ -120,14 +98,6 @@ app.post('/api/validate-key', userAuthMiddleware, (req, res) => {
 });
 
 app.post('/api/process-image', apiRateLimiter, userAuthMiddleware, async (req, res) => {
-	if (!req.file) {
-    return res.status(400).json({ error: 'File ảnh là bắt buộc' });
-  }
-
-  try {
-    const imageBuffer = req.file.buffer; // file ảnh upload dưới dạng buffer
-    const mimeType = req.file.mimetype;
-    
     const apiKey = keyPool.getKeyForUser(req.providedKey);
     if (!apiKey) {
         return res.status(503).json({ error: 'All API resources are currently busy. Please try again in a few moments.' });
